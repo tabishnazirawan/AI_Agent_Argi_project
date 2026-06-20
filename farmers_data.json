@@ -1,0 +1,574 @@
+[
+    {
+        "timestamp": "2026-06-07T21:02:58.908276",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:02:59.269264",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:00.815889",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:01.534410",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:02.765177",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:03.281208",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:04.411348",
+        "log_data": "seasonal analysis and advice given to farmer for improvement"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:05.407865",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:06.589321",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:06.924845",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:08.736699",
+        "log_data": "seasonal analysis and advice for better yield"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:10.115546",
+        "log_data": "\u0641\u0635\u0644 \u06a9\u06cc \u067e\u06cc\u062f\u0627\u0648\u0627\u0631 \u06a9\u0627 \u062a\u062c\u0632\u06cc\u06c1 \u06a9\u06cc\u0627 \u06af\u06cc\u0627 \u06c1\u06d2 \ud83c\udf3e\ud83c\udf31"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:11.094576",
+        "log_data": "Crop yield analysis and advice provided for better farming practices \ud83c\udf3e\ud83c\udf31"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:12.533658",
+        "log_data": "seasonal analysis and advice for better yield"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:13.049181",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:14.613668",
+        "log_data": "seasonal analysis and advice for better yield"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:14.697835",
+        "log_data": "seasonal analysis and advice for better yield"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:16.336578",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:16.749116",
+        "log_data": "seasonal analysis and advice for better yield"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:17.465074",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:18.716711",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:20.016793",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:23.357021",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:24.983064",
+        "log_data": "seasonal analysis and advice given to farmer for improvement"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:29.407611",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:33.625521",
+        "log_data": "Crop yield analysis and advice provided for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:35.095178",
+        "log_data": "Crop yield analysis and advice provided for wheat crop"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:36.589868",
+        "log_data": "Crop yield analysis and advice provided for wheat crop"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:38.539228",
+        "log_data": "Consulted farmer about yield analysis and optimization for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:38.640828",
+        "log_data": "Crop yield analysis and advice provided for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:44.413308",
+        "log_data": "seasonal analysis and advice for better yield"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:49.126847",
+        "log_data": "seasonal analysis and advice given to farmer for improvement"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:49.378277",
+        "log_data": "seasonal analysis and advice given to farmer for improvement"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:53.042261",
+        "log_data": "\u0641\u0635\u0644 \u06a9\u06cc \u067e\u06cc\u062f\u0627\u0648\u0627\u0631 \u06a9\u0627 \u062a\u062c\u0632\u06cc\u06c1 \u06a9\u06cc\u0627 \u06af\u06cc\u0627\u060c \u0627\u0648\u0631 \u0628\u06c1\u062a\u0631\u06cc \u06a9\u06d2 \u0644\u06cc\u06d2 \u0645\u0634\u0648\u0631\u06c1 \u062f\u06cc\u0627 \u06af\u06cc\u0627 \ud83c\udf3e\ud83c\udf31"
+    },
+    {
+        "timestamp": "2026-06-07T21:03:54.823989",
+        "log_data": "Crop yield analysis and advice provided for wheat crop."
+    },
+    {
+        "timestamp": "2026-06-07T21:03:57.291182",
+        "log_data": "Consulted farmer about yield analysis and improvement for wheat crop"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:03.333609",
+        "log_data": "Crop yield analysis and advice given to farmer for improvement."
+    },
+    {
+        "timestamp": "2026-06-07T21:04:05.072915",
+        "log_data": "Crop yield analysis and advice provided for better farming practices \ud83c\udf3e\ud83c\udf31"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:06.700403",
+        "log_data": "seasonal analysis and advice given to farmer for improvement"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:13.502547",
+        "log_data": "Crop yield analysis and advice provided for better farming practices \ud83c\udf3e\ud83c\udf31"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:13.913998",
+        "log_data": "seasonal analysis and advice given to farmer for improvement"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:17.101854",
+        "log_data": "Crop yield analysis and advice given to farmer for improvement."
+    },
+    {
+        "timestamp": "2026-06-07T21:04:22.387837",
+        "log_data": "Crop yield analysis and advice given to farmer for improvement."
+    },
+    {
+        "timestamp": "2026-06-07T21:04:23.900606",
+        "log_data": "seasonal analysis and advice given to farmer for improvement"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:29.848822",
+        "log_data": "Crop yield analysis and improvement advice"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:33.479372",
+        "log_data": "Crop yield analysis requested"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:33.718654",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:36.872252",
+        "log_data": "Crop yield analysis advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:40.124068",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:42.083191",
+        "log_data": "Crop yield analysis initiated"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:44.031708",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:50.202131",
+        "log_data": "Kisan ko apne khed ki details deni hongi"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:52.563678",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:56.778849",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:04:57.289913",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:02.978388",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:08.597624",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:09.217080",
+        "log_data": "Crop yield analysis and improvement advice provided to farmer."
+    },
+    {
+        "timestamp": "2026-06-07T21:05:12.300943",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:15.293934",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:17.853600",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:18.673154",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:22.990907",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:23.531848",
+        "log_data": "Crop yield analysis and improvement advice"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:26.804226",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:30.191962",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:36.483781",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:37.789419",
+        "log_data": "Fasal ki nigehbaan karni hogi, seeds ki zaroorat 500 kg hogi, anumaanit production 400 bags hogi"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:41.816577",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:45.092203",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:47.365396",
+        "log_data": "Crop yield analysis and improvement advice provided to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:50.847700",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:55.268340",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:05:57.324171",
+        "log_data": "Crop yield analysis ki zaroorat hai, lekin kam information ke kaaran analysis mushkil hai"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:03.183729",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:07.730219",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:10.378683",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:17.369665",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:17.887852",
+        "log_data": "Crop yield analysis and advice given"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:24.732784",
+        "log_data": "Crop yield analysis and improvement advice provided to farmer."
+    },
+    {
+        "timestamp": "2026-06-07T21:06:26.939970",
+        "log_data": "Crop yield analysis ki zaroorat hai, details deni hongi."
+    },
+    {
+        "timestamp": "2026-06-07T21:06:32.777493",
+        "log_data": "Crop yield analysis requested but details not provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:32.889005",
+        "log_data": "Crop yield analysis and advice given"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:43.322069",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:44.659788",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:47.832395",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:51.002531",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:52.537745",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:54.279557",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:06:56.845975",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:07:02.880689",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:07:04.515954",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:07:04.830137",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:07:06.465807",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:07:11.683494",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:07:11.788937",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:07:15.236079",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:07:17.169084",
+        "log_data": "Crop yield improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:07:20.804642",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:07:21.826267",
+        "log_data": "Crop yield analysis request received, awaiting more information from farmer."
+    },
+    {
+        "timestamp": "2026-06-07T21:07:28.070748",
+        "log_data": "Crop yield analysis and improvement advice provided to farmer."
+    },
+    {
+        "timestamp": "2026-06-07T21:19:31.520555",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-07T21:19:38.965571",
+        "log_data": "Crop yield analysis and improvement advice provided to farmer."
+    },
+    {
+        "timestamp": "2026-06-07T21:19:40.809532",
+        "log_data": "Crop yield analysis and improvement advice provided to farmer."
+    },
+    {
+        "timestamp": "2026-06-07T21:22:12.211494",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:22:18.296661",
+        "log_data": "Crop yield analysis for wheat crop in kharif season"
+    },
+    {
+        "timestamp": "2026-06-07T21:22:21.377168",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:22:26.707693",
+        "log_data": "Crop yield analysis and improvement advice provided for wheat crop"
+    },
+    {
+        "timestamp": "2026-06-07T21:22:29.662322",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:22:41.844724",
+        "log_data": "Crop yield analysis for wheat crop, advice given for improvement."
+    },
+    {
+        "timestamp": "2026-06-07T21:22:44.304963",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:22:49.016490",
+        "log_data": "Crop yield analysis for wheat, 5 acres, 20004 kg production, 6 kg/acre predicted yield, kharif season"
+    },
+    {
+        "timestamp": "2026-06-07T21:22:51.861288",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-07T21:28:29.010784",
+        "log_data": "Crop yield analysis for wheat, area 5 acres, production 2000 kg, predicted yield 4 kg/acre"
+    },
+    {
+        "timestamp": "2026-06-07T21:28:34.654667",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:40:36.659794",
+        "log_data": "Crop yield analysis requested, but incomplete information provided."
+    },
+    {
+        "timestamp": "2026-06-07T21:40:37.746422",
+        "log_data": "User provided incomplete information for crop yield analysis, provided general advice."
+    },
+    {
+        "timestamp": "2026-06-07T21:40:44.976866",
+        "log_data": "Crop yield analysis for wheat crop in kharif season"
+    },
+    {
+        "timestamp": "2026-06-07T21:43:59.213130",
+        "log_data": "Crop yield analysis for wheat crop, improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:44:01.098172",
+        "log_data": "Crop yield analysis and improvement advice provided"
+    },
+    {
+        "timestamp": "2026-06-07T21:51:55.574802",
+        "log_data": "Crop yield analysis and improvement advice provided to farmer."
+    },
+    {
+        "timestamp": "2026-06-07T21:52:07.941506",
+        "log_data": "Crop yield analysis and improvement advice provided for wheat crop"
+    },
+    {
+        "timestamp": "2026-06-07T21:52:11.990759",
+        "log_data": "Kisan ko apne khed ki details deni hongi"
+    },
+    {
+        "timestamp": "2026-06-07T22:10:40.438539",
+        "log_data": "Crop yield analysis and improvement advice provided to farmer."
+    },
+    {
+        "timestamp": "2026-06-07T22:11:57.683586",
+        "log_data": "Crop yield analysis requested, but information was incomplete."
+    },
+    {
+        "timestamp": "2026-06-10T20:45:43.540687",
+        "log_data": "Cedar apple rust ki wajah, asar, aur agla kadam explain kiya"
+    },
+    {
+        "timestamp": "2026-06-12T23:46:36.004684",
+        "log_data": "Islamabad ka mausam: 25.9\u00b0C, Mainly clear. Kisan ko irrigation, spraying, fertilizer ka dhyan rakhna chahiye."
+    },
+    {
+        "timestamp": "2026-06-12T23:46:50.623378",
+        "log_data": "Predicted yield for Wheat in winter season: 2000 bags, improvement tips: proper temperature, water, and fertilizer management"
+    },
+    {
+        "timestamp": "2026-06-12T23:48:03.541218",
+        "log_data": "Image scan: {'status': 'success', 'predicted_class': 'Pepper - Bacterial spot', 'confidence': '99.9%', 'remedy': 'Agri-expert se consult karein. \ud83c\udf3f', 'source': 'local_model'}"
+    },
+    {
+        "timestamp": "2026-06-15T00:23:05.588280",
+        "log_data": "Image scan: {'status': 'success', 'predicted_class': 'Potato - Early blight', 'confidence': '92.6%', 'remedy': 'Mancozeb fungicide spray karein, infected pattiyan jala dein. \ud83c\udf31', 'source': 'local_model'}"
+    },
+    {
+        "timestamp": "2026-06-15T00:23:45.174128",
+        "log_data": "Islamabad ka mausam: 27.1\u00b0C, Clear sky. Irrigation, spraying, fertilizer sab ka dhyan rakhna hai."
+    },
+    {
+        "timestamp": "2026-06-15T00:24:19.698340",
+        "log_data": "Predicted yield for Wheat in winter season: 6000 bags, improvement tips: better farming practices, proper fertilizer and water supply"
+    },
+    {
+        "timestamp": "2026-06-15T00:24:19.820964",
+        "log_data": "Predicted yield for Wheat in winter season, area: 150 acres, production: 1500 kg."
+    },
+    {
+        "timestamp": "2026-06-17T23:41:20.028780",
+        "log_data": "Islamabad mein mausam saaf hai, kisan ko apni fasal ke liye munasib irrigation system lagana chahiye, pesticides aur fertilizers ka istemal karna chahiye, aur apni fasal ki dekhbhal karte waqt ehtiyat baratna chahiye."
+    },
+    {
+        "timestamp": "2026-06-18T00:16:18.262573",
+        "log_data": "Crop yield analysis and advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-18T00:16:19.426109",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-18T00:18:15.414671",
+        "log_data": "Crop yield analysis and improvement advice provided to farmer."
+    },
+    {
+        "timestamp": "2026-06-18T01:24:17.919729",
+        "log_data": "Karachi mein mausam 29.4\u00b0C hai, aur kisan ko apni fasal ke liye irrigation, spraying, aur fertilizer dena chahiye."
+    },
+    {
+        "timestamp": "2026-06-18T01:24:49.741712",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-18T01:24:52.425635",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-18T02:45:03.694181",
+        "log_data": "Crop yield analysis and improvement advice given to farmer"
+    },
+    {
+        "timestamp": "2026-06-18T02:45:07.243820",
+        "log_data": "Crop yield analysis"
+    },
+    {
+        "timestamp": "2026-06-18T02:45:18.289922",
+        "log_data": "Islamabad ka mausam: 27.5\u00b0C, Clear sky. Irrigation, spraying, fertilizer ka istemal karna chahiye."
+    }
+]

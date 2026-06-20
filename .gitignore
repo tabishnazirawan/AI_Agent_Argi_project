@@ -1,0 +1,9 @@
+venv/
+my_venv/
+stable_venv/
+__pycache__/
+*.pyc
+uploads/
+.env
+models/plantdoctor/
+bfg-1.14.0.jar
