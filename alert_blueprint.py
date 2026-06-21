@@ -1,19 +1,15 @@
 import json
 import os
-import smtplib
 import requests
 from flask import Blueprint, request, jsonify
 from datetime import datetime, timedelta
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 
 alert_bp = Blueprint("alert_bp", __name__)
 
 # --- CONFIGURATION ---
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
-SMTP_EMAIL = "tabishnazir0101@gmail.com"
-SMTP_PASSWORD = "bknb ugow gxfj qqyl" 
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
+SENDER_EMAIL = "23-se-117@student.hitecuni.edu.pk"
+SENDER_NAME = "Agri-AI Team By TYS"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FARMERS_DB = os.path.join(BASE_DIR, "farmers_data.json")
@@ -99,7 +95,7 @@ def save_farmers(farmers_list):
 def get_current_season():
     """Determine current season based on month"""
     month = datetime.now().month
-    
+
     if month in [12, 1, 2]:
         return "winter"
     elif month in [3, 4, 5]:
@@ -140,9 +136,9 @@ def create_weather_message(w):
     """Create weather alert message with farming advice"""
     if not w:
         return "Weather data unavailable."
-    
+
     temp = w['temperature']
-    
+
     if temp > 35:
         advice = "⚠️ Bohat garmi hai! Fasal ko subah jaldi ya shaam ko paani dein."
     elif temp < 10:
@@ -151,7 +147,7 @@ def create_weather_message(w):
         advice = "✅ Acha mausam hai! Khaad aur spray ke liye behtareen waqt."
     else:
         advice = "🌾 Mamooli halat. Apni mamooli kheti jari rakhein."
-    
+
     return f"""
     🌤️ Agri-AI Mausam Alert 🌤️
 
@@ -179,7 +175,7 @@ def create_market_alert(city):
     """Create REAL market prices alert (not random)"""
     current_season = get_current_season()
     today = datetime.now().strftime("%Y-%m-%d")
-    
+
     # Market analysis based on season
     seasonal_analysis = {
         "winter": "Sardi mein gandum ki demand barhti hai. Chawal ki qeemat stable rehti hai.",
@@ -187,7 +183,7 @@ def create_market_alert(city):
         "rainy": "Barish mein anaaj ki supply kam hoti hai, qeemat barh sakti hai.",
         "autumn": "Naye fasal aane wali hai, purani fasal ki qeemat gir sakti hai."
     }
-    
+
     return f"""
     📈 Agri-AI Bazaar Kiqat Alert 📈
 
@@ -219,9 +215,9 @@ def create_disease_alert(city):
     current_season = get_current_season()
     weather = get_weather_data(city)
     temp = weather['temperature'] if weather else 25
-    
+
     season_diseases = SEASONAL_DISEASES.get(current_season, SEASONAL_DISEASES["winter"])
-    
+
     # Determine risk level based on temperature and season
     if current_season == "rainy" and temp > 25:
         risk_level = "ZIYADA (High)"
@@ -232,7 +228,7 @@ def create_disease_alert(city):
     else:
         risk_level = "KAM (Low)"
         reason = "Mausam disease-friendly nahi hai"
-    
+
     return f"""
     🦠 Agri-AI Bimari Alert 🦠
 
@@ -241,7 +237,7 @@ def create_disease_alert(city):
     ⚠️ Khatra Darja: {risk_level}
     🌡️ Hararat: {temp}°C
     🍂 Mausam: {current_season}
-    
+
     Reason: {reason}
 
     🦠 Is Mausam Ki Common Bimarian:
@@ -256,7 +252,7 @@ def create_disease_alert(city):
 
     📅 Ye Alerts Har Mausam Badaltay Hain:
     • Winter: Fungal diseases
-    • Summer: Heat stress diseases  
+    • Summer: Heat stress diseases 
     • Rainy: Bacterial & fungal diseases
 
     🚨 Fori Amal:
@@ -269,25 +265,34 @@ def create_disease_alert(city):
     """
 
 def send_email_alert(recipient_email, message_body, subject="Agri-AI Alert"):
+    """Send email via Brevo's HTTPS API (works on Render free tier - no SMTP port blocking)"""
     try:
-        # --- FIX: Yahan msg variable define karein ---
-        msg = MIMEMultipart()
-        msg["From"] = SMTP_EMAIL
-        msg["To"] = recipient_email
-        msg["Subject"] = subject
-        msg.attach(MIMEText(message_body, "plain"))
-        # ----------------------------------------------
+        if not BREVO_API_KEY:
+            print("❌ EMAIL ERROR: BREVO_API_KEY not set in environment")
+            return False
 
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-        server.set_debuglevel(1)
-        server.starttls()
-        server.login(SMTP_EMAIL, SMTP_PASSWORD)
+        url = "https://api.brevo.com/v3/smtp/email"
+        headers = {
+            "accept": "application/json",
+            "api-key": BREVO_API_KEY,
+            "content-type": "application/json",
+        }
+        payload = {
+            "sender": {"name": SENDER_NAME, "email": SENDER_EMAIL},
+            "to": [{"email": recipient_email}],
+            "subject": subject,
+            "textContent": message_body,
+        }
 
-        # Ab 'msg' define ho chuka hai, error nahi aayega
-        server.send_message(msg)
+        response = requests.post(url, headers=headers, json=payload, timeout=15)
 
-        server.quit()
-        return True
+        if response.status_code in (200, 201):
+            print(f"✅ Email sent successfully to {recipient_email}")
+            return True
+        else:
+            print(f"❌ DETAILED EMAIL ERROR: {response.status_code} - {response.text}")
+            return False
+
     except Exception as e:
         print(f"❌ DETAILED EMAIL ERROR: {type(e).__name__}: {str(e)}")
         return False
@@ -301,21 +306,21 @@ def register_farmer():
         return jsonify({"error": "Invalid data"}), 400
 
     farmers = load_farmers()
-    
+
     new_farmer = {
         "name": data.get("name", "Unknown"),
         "email": data["email"],
         "city": data.get("city", "Unknown"),
         "registered_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
-    
+
     for f in farmers:
         if f["email"] == new_farmer["email"]:
             return jsonify({"message": "Farmer already registered"}), 400
 
     farmers.append(new_farmer)
     save_farmers(farmers)
-    
+
     return jsonify({"message": "Farmer registered successfully", "farmer": new_farmer})
 
 @alert_bp.route("/api/farmers", methods=["GET"])
@@ -329,7 +334,7 @@ def update_market_prices():
     data = request.json
     if not data or "prices" not in data:
         return jsonify({"error": "Prices data required"}), 400
-    
+
     # Update market prices
     for crop, price_data in data["prices"].items():
         if crop in REAL_MARKET_PRICES:
@@ -337,7 +342,7 @@ def update_market_prices():
             REAL_MARKET_PRICES[crop]["trend"] = price_data.get("trend", REAL_MARKET_PRICES[crop]["trend"])
             REAL_MARKET_PRICES[crop]["last_updated"] = datetime.now().strftime("%Y-%m-%d")
             REAL_MARKET_PRICES[crop]["next_update"] = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
-    
+
     return jsonify({
         "status": True,
         "message": "Market prices updated successfully",
@@ -359,25 +364,25 @@ def send_instant_alert():
             weather_info = get_weather_data(city)
             msg_text = create_weather_message(weather_info)
             subject = f"🌤️ Agri-AI Mausam Alert - {city}"
-            
+
         elif alert_type == "prices":
             msg_text = create_market_alert(city)
             subject = f"📈 Agri-AI Bazaar Alert - {city}"
-            
+
         elif alert_type == "disease":
             msg_text = create_disease_alert(city)
             subject = f"🦠 Agri-AI Bimari Alert - {city}"
-            
+
         else:
             weather_info = get_weather_data(city)
             msg_text = create_weather_message(weather_info)
             subject = f"🌤️ Agri-AI Mausam Alert - {city}"
-        
+
         success = send_email_alert(email, msg_text, subject)
 
         if success:
             return jsonify({
-                "status": True, 
+                "status": True,
                 "message": f"{alert_type.capitalize()} alert sent successfully",
                 "alert_type": alert_type,
                 "city": city,
@@ -385,15 +390,15 @@ def send_instant_alert():
             })
         else:
             return jsonify({
-                "status": False, 
+                "status": False,
                 "message": "Email sending failed",
                 "alert_type": alert_type
             }), 500
-            
+
     except Exception as e:
         print(f"❌ Alert Error: {e}")
         return jsonify({
-            "status": False, 
+            "status": False,
             "message": f"Server error: {str(e)}"
         }), 500
 
