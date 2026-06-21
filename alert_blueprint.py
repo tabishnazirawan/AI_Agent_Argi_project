@@ -282,14 +282,15 @@ def send_email_alert(recipient_email, message_body, subject="Agri-AI Alert"):
         server.set_debuglevel(1)
         server.starttls()
         server.login(SMTP_EMAIL, SMTP_PASSWORD)
-        
+
         # Ab 'msg' define ho chuka hai, error nahi aayega
-        server.send_message(msg) 
+        server.send_message(msg)
+
         server.quit()
         return True
     except Exception as e:
-     print(f"❌ DETAILED EMAIL ERROR: {type(e).__name__}: {str(e)}")
-    return False
+        print(f"❌ DETAILED EMAIL ERROR: {type(e).__name__}: {str(e)}")
+        return False
 
 # --- API ROUTES ---
 
