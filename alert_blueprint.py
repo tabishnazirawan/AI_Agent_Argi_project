@@ -265,11 +265,13 @@ def create_disease_alert(city):
     """
 
 def send_email_alert(recipient_email, message_body, subject="Agri-AI Alert"):
-    """Send email via Brevo's HTTPS API (works on Render free tier - no SMTP port blocking)"""
     try:
         if not BREVO_API_KEY:
             print("❌ EMAIL ERROR: BREVO_API_KEY not set in environment")
             return False
+
+        # TEMPORARY DEBUG LINE - hata dena baad mein
+        print(f"🔑 DEBUG: Key starts with '{BREVO_API_KEY[:10]}' length={len(BREVO_API_KEY)}")
 
         url = "https://api.brevo.com/v3/smtp/email"
         headers = {
