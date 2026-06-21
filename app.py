@@ -95,28 +95,44 @@ MODEL_DIR = os.path.join(BASE_DIR, "models")
 
 # ---------------------------------------------------------
 
-adv_model = safe_load(os.path.join(MODEL_DIR, "pesticide_yield_model.pkl"))
-
-scaler = safe_load(os.path.join(MODEL_DIR, "scaler.pkl"))
-
+# ---------------------------------------------------------
+# Lazy Model Loaders (load on first use, not on startup)
+# ---------------------------------------------------------
+adv_model = None
+scaler = None
 crop_yield_model = None
-try:
-    crop_yield_model = joblib.load(os.path.join(MODEL_DIR, "crop_yield_model.pkl"))
-    logger.info("✅ Crop Yield V2 model loaded")
-except Exception as e:
-    logger.error(f"❌ Crop Yield V2 load failed: {e}")
+disease_model = None
 
+def get_adv_model():
+    global adv_model, scaler
+    if adv_model is None:
+        adv_model = safe_load(os.path.join(MODEL_DIR, "pesticide_yield_model.pkl"))
+        scaler = safe_load(os.path.join(MODEL_DIR, "scaler.pkl"))
+        logger.info("✅ Pesticide/Adv model loaded (lazy)")
+    return adv_model, scaler
 
+def get_crop_yield_model():
+    global crop_yield_model
+    if crop_yield_model is None:
+        try:
+            crop_yield_model = joblib.load(os.path.join(MODEL_DIR, "crop_yield_model.pkl"))
+            logger.info("✅ Crop Yield V2 model loaded (lazy)")
+        except Exception as e:
+            logger.error(f"❌ Crop Yield V2 load failed: {e}")
+    return crop_yield_model
 
-try:
-    disease_model = keras.models.load_model(
-        os.path.join(MODEL_DIR, "PlantDoctor_Final_v1.keras"), 
-        compile=False
-    )
-    print("✅ Disease model (PlantDoctor_Final_v1) loaded successfully")
-except Exception as e:
-    disease_model = None
-    print(f"❌ Failed to load disease model: {e}")
+def get_disease_model():
+    global disease_model
+    if disease_model is None:
+        try:
+            disease_model = keras.models.load_model(
+                os.path.join(MODEL_DIR, "PlantDoctor_Final_v1.keras"),
+                compile=False
+            )
+            print("✅ Disease model (PlantDoctor_Final_v1) loaded successfully (lazy)")
+        except Exception as e:
+            print(f"❌ Failed to load disease model: {e}")
+    return disease_model
 
 # ---------------------------------------------------------
 
@@ -273,6 +289,7 @@ def predict_yield():
             "fert_per_NPK": fert_per_NPK,
             "temp_N_interact": temp_N_interact,
         }])
+        crop_yield_model = get_crop_yield_model()
         if crop_yield_model:
             YIELD_CONVERSION = {"wheat": 135, "rice": 210, "maize": 220, "cotton": 120, "sugarcane": 2700}
             raw = crop_yield_model.predict(input_df)[0]
@@ -917,6 +934,7 @@ def predict_disease():
 
 
 
+        disease_model = get_disease_model()
 
 
         if not disease_model:
@@ -1034,11 +1052,4 @@ if __name__ == "__main__":
 
 
 # ── Crop Yield V2 (crop_yield_model.pkl) ─────────────────────
-import pandas as pd
 
-crop_yield_model = None
-try:
-    crop_yield_model = joblib.load(os.path.join(MODEL_DIR, "crop_yield_model.pkl"))
-    logger.info("✅ Crop Yield V2 model loaded")
-except Exception as e:
-    logger.error(f"❌ Crop Yield V2 load failed: {e}")
