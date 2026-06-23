@@ -59,6 +59,17 @@ app.register_blueprint(alert_bp)
 
 # ---------------------------------------------------------
 
+# OpenWeatherMap Configuration
+
+# ---------------------------------------------------------
+
+OPENWEATHER_API_KEY = os.environ.get("OPENWEATHER_API_KEY")
+OPENWEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5"
+
+
+
+# ---------------------------------------------------------
+
 # Safe Model Loader (ONLY for pickle / joblib models)
 
 # ---------------------------------------------------------
@@ -303,7 +314,7 @@ def predict_yield():
         return jsonify({"error": str(e)}), 500
 # ---------------------------------------------------------
 
-# Weather API - IMPROVED VERSION
+# Weather API - OpenWeatherMap Version
 
 # ---------------------------------------------------------
 
@@ -319,109 +330,127 @@ def get_weather():
 
 
 
+    if not OPENWEATHER_API_KEY:
+
+        return jsonify({"error": "Weather service not configured"}), 500
+
+
+
     try:
 
-        # Get coordinates for the city
-
-        geo_response = requests.get(
-
-            f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1",
-
-            timeout=10
-
-        ).json()
-
-        
-
-        if not geo_response.get("results"):
-
-            return jsonify({"error": "City not found"}), 404
-
-
-
-        lat = geo_response["results"][0]["latitude"]
-
-        lon = geo_response["results"][0]["longitude"]
-
-        found_city = geo_response["results"][0]["name"]
-
-        region = geo_response["results"][0].get("admin1", "")
-
-        country = geo_response["results"][0].get("country", "")
-
-
-
-        # Get current weather AND forecast (3 days)
+        # Single call: current weather by city name (includes coordinates, country, etc.)
 
         weather_response = requests.get(
-            f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,wind_speed_10m,weather_code,is_day,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&forecast_days=3",
+
+            f"{OPENWEATHER_BASE_URL}/weather",
+
+            params={
+
+                "q": city,
+
+                "appid": OPENWEATHER_API_KEY,
+
+                "units": "metric"
+
+            },
+
             timeout=10
+
         ).json()
 
-        print(f"🌦️ DEBUG weather_response: {weather_response}")
-
-        if "current" not in weather_response:
-            return jsonify({"error": "Weather data not available"}), 500
 
 
+        if str(weather_response.get("cod")) != "200":
 
-        current = weather_response["current"]
+            return jsonify({"error": weather_response.get("message", "City not found")}), 404
 
-        daily = weather_response.get("daily", {})
 
-        
 
-        # Get weather condition name from weather_code
+        lat = weather_response["coord"]["lat"]
 
-        weathercode = int(current["weather_code"])
+        lon = weather_response["coord"]["lon"]
 
-        condition_name = get_weather_condition(weathercode)
+        found_city = weather_response.get("name", city)
 
-        
+        country = weather_response.get("sys", {}).get("country", "")
 
-        # Since Open-Meteo doesn't provide humidity in free API, we'll simulate it
 
-        # based on temperature and weather conditions
 
-        humidity = simulate_humidity(weathercode, current["temperature_2m"])
+        main = weather_response.get("main", {})
 
-        
+        wind = weather_response.get("wind", {})
+
+        weather_arr = weather_response.get("weather", [{}])
+
+        weather_id = weather_arr[0].get("id", 800) if weather_arr else 800
+
+        condition_name = weather_arr[0].get("description", "Unknown").capitalize() if weather_arr else "Unknown"
+
+
+
+        # Get 3-day forecast using the 5 day / 3 hour forecast endpoint
+
+        forecast_response = requests.get(
+
+            f"{OPENWEATHER_BASE_URL}/forecast",
+
+            params={
+
+                "lat": lat,
+
+                "lon": lon,
+
+                "appid": OPENWEATHER_API_KEY,
+
+                "units": "metric"
+
+            },
+
+            timeout=10
+
+        ).json()
+
+
+
+        forecast_list = forecast_response.get("list", [])
+
+
 
         return jsonify({
 
             "city": found_city,
 
-            "region": region,
+            "region": "",
 
             "country": country,
 
-            "temperature": current["temperature_2m"],
+            "temperature": main.get("temp"),
 
-            "feels_like": current["temperature_2m"],  # Same as temp for simplicity
+            "feels_like": main.get("feels_like", main.get("temp")),
 
-            "humidity": humidity,
+            "humidity": main.get("humidity", 50),
 
-            "windspeed": current["wind_speed_10m"],
+            "windspeed": wind.get("speed", 0),
 
-            "wind_direction": get_wind_direction(current.get("wind_direction_10m", 0)),
+            "wind_direction": get_wind_direction(wind.get("deg", 0)),
 
-            "weathercode": weathercode,
+            "weathercode": weather_id,
 
             "condition": condition_name,
 
             "last_updated": "Now",
 
-            "is_day": current.get("is_day", 1),
+            "is_day": 1,
 
-            "cloud": get_cloud_cover(weathercode),
+            "cloud": weather_response.get("clouds", {}).get("all", 0),
 
-            "pressure_mb": 1013,  # Default value
+            "pressure_mb": main.get("pressure", 1013),
 
-            "precip_mm": 0,  # Default value
+            "precip_mm": 0,
 
-            "uv": 5,  # Default value
+            "uv": 5,
 
-            "forecast": get_forecast_data(daily) if daily else []
+            "forecast": get_forecast_data_owm(forecast_list) if forecast_list else []
 
         })
 
@@ -447,9 +476,7 @@ def get_weather():
 
 def get_weather_condition(weathercode):
 
-    """Convert WMO weather code to human-readable condition"""
-
-    # WMO Weather interpretation codes (WW)
+    """Convert WMO weather code to human-readable condition (legacy helper, kept for compatibility)"""
 
     if weathercode == 0:
 
@@ -515,7 +542,7 @@ def get_wind_direction(degrees):
 
 def get_cloud_cover(weathercode):
 
-    """Estimate cloud cover percentage from weathercode"""
+    """Estimate cloud cover percentage from weathercode (legacy helper, kept for compatibility)"""
 
     if weathercode in [0, 1]:
 
@@ -545,25 +572,17 @@ def get_cloud_cover(weathercode):
 
 def simulate_humidity(weathercode, temperature):
 
-    """Simulate humidity based on weather conditions and temperature"""
+    """Legacy helper, kept for compatibility (OpenWeatherMap provides real humidity now)"""
 
     base_humidity = 50
 
-    
-
-    # Adjust based on weather
-
     if weathercode in [45, 48, 51, 53, 55, 61, 63, 65, 80, 81, 82]:
 
-        base_humidity = 85  # Higher for rain/fog
+        base_humidity = 85
 
     elif weathercode in [0, 1]:
 
-        base_humidity = 30  # Lower for clear skies
-
-    
-
-    # Adjust based on temperature
+        base_humidity = 30
 
     if temperature > 30:
 
@@ -573,47 +592,7 @@ def simulate_humidity(weathercode, temperature):
 
         base_humidity += 15
 
-    
-
-    # Keep within reasonable bounds
-
     return max(20, min(base_humidity, 100))
-
-
-
-def get_forecast_data(daily):
-
-    """Extract forecast data from daily forecast"""
-
-    if not daily or "time" not in daily:
-
-        return []
-
-    
-
-    forecast = []
-
-    for i in range(min(3, len(daily["time"]))):  # Get next 3 days
-
-        day_name = get_day_name(i)
-
-        forecast.append({
-
-            "day": day_name,
-
-            "max_temp": daily["temperature_2m_max"][i],
-
-            "min_temp": daily["temperature_2m_min"][i],
-
-            "weathercode": daily["weather_code"][i],
-
-            "condition": get_weather_condition(daily["weather_code"][i])
-
-        })
-
-    
-
-    return forecast
 
 
 
@@ -629,13 +608,63 @@ def get_day_name(offset):
 
         return days[offset]
 
-    
-
-    # Fallback to actual day names
-
     target_date = datetime.now() + timedelta(days=offset)
 
     return target_date.strftime("%a")
+
+
+
+def get_forecast_data_owm(forecast_list):
+
+    """Extract a 3-day forecast (one entry per day, around midday) from OpenWeatherMap's 3-hourly list"""
+
+    if not forecast_list:
+
+        return []
+
+
+
+    daily_buckets = {}
+
+    for entry in forecast_list:
+
+        date_str = entry["dt_txt"].split(" ")[0]
+
+        daily_buckets.setdefault(date_str, []).append(entry)
+
+
+
+    forecast = []
+
+    for i, (date_str, entries) in enumerate(list(daily_buckets.items())[:3]):
+
+        temps = [e["main"]["temp"] for e in entries]
+
+        # Prefer the entry closest to midday for the representative weather code
+
+        midday_entry = min(entries, key=lambda e: abs(int(e["dt_txt"].split(" ")[1].split(":")[0]) - 12))
+
+        weather_id = midday_entry["weather"][0]["id"] if midday_entry.get("weather") else 800
+
+        condition = midday_entry["weather"][0]["description"].capitalize() if midday_entry.get("weather") else "Unknown"
+
+        forecast.append({
+
+            "day": get_day_name(i),
+
+            "max_temp": round(max(temps), 1),
+
+            "min_temp": round(min(temps), 1),
+
+            "weathercode": weather_id,
+
+            "condition": condition
+
+        })
+
+
+
+    return forecast
 
 
 
@@ -697,39 +726,29 @@ def get_current_location_weather():
 
 def get_weather_by_city_name(city_name):
 
-    """Helper function to get weather for a specific city"""
+    """Helper function to get weather for a specific city (OpenWeatherMap version)"""
 
     try:
 
-        # Same logic as /weather endpoint but for a specific city
+        if not OPENWEATHER_API_KEY:
 
-        geo_response = requests.get(
-
-            f"https://geocoding-api.open-meteo.com/v1/search?name={city_name}&count=1",
-
-            timeout=10
-
-        ).json()
-
-        
-
-        if not geo_response.get("results"):
-
-            return jsonify({"error": "City not found"}), 404
-
-
-
-        lat = geo_response["results"][0]["latitude"]
-
-        lon = geo_response["results"][0]["longitude"]
-
-        found_city = geo_response["results"][0]["name"]
+            return jsonify({"error": "Weather service not configured"}), 500
 
 
 
         weather_response = requests.get(
 
-            f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,wind_speed_10m,weather_code&timezone=auto",
+            f"{OPENWEATHER_BASE_URL}/weather",
+
+            params={
+
+                "q": city_name,
+
+                "appid": OPENWEATHER_API_KEY,
+
+                "units": "metric"
+
+            },
 
             timeout=10
 
@@ -737,33 +756,43 @@ def get_weather_by_city_name(city_name):
 
 
 
-        current = weather_response["current"]
+        if str(weather_response.get("cod")) != "200":
 
-        weathercode = int(current["weather_code"])
+            return jsonify({"error": weather_response.get("message", "City not found")}), 404
 
-        condition_name = get_weather_condition(weathercode)
 
-        humidity = simulate_humidity(weathercode, current["temperature_2m"])
 
-        
+        found_city = weather_response.get("name", city_name)
+
+        main = weather_response.get("main", {})
+
+        wind = weather_response.get("wind", {})
+
+        weather_arr = weather_response.get("weather", [{}])
+
+        weather_id = weather_arr[0].get("id", 800) if weather_arr else 800
+
+        condition_name = weather_arr[0].get("description", "Unknown").capitalize() if weather_arr else "Unknown"
+
+
 
         return jsonify({
 
             "city": found_city,
 
-            "temperature": current["temperature_2m"],
+            "temperature": main.get("temp"),
 
-            "windspeed": current["wind_speed_10m"],
+            "windspeed": wind.get("speed", 0),
 
-            "weathercode": weathercode,
+            "weathercode": weather_id,
 
             "condition": condition_name,
 
-            "humidity": humidity
+            "humidity": main.get("humidity", 50)
 
         })
 
-        
+
 
     except Exception as e:
 
@@ -781,7 +810,7 @@ def get_weather_by_city_name(city_name):
 
 def get_forecast():
 
-    """Get 3-day weather forecast"""
+    """Get 3-day weather forecast (OpenWeatherMap version)"""
 
     city = request.args.get("city")
 
@@ -791,35 +820,27 @@ def get_forecast():
 
 
 
+    if not OPENWEATHER_API_KEY:
+
+        return jsonify({"error": "Weather service not configured"}), 500
+
+
+
     try:
 
-        geo_response = requests.get(
+        current_response = requests.get(
 
-            f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1",
+            f"{OPENWEATHER_BASE_URL}/weather",
 
-            timeout=10
+            params={
 
-        ).json()
+                "q": city,
 
-        
+                "appid": OPENWEATHER_API_KEY,
 
-        if not geo_response.get("results"):
+                "units": "metric"
 
-            return jsonify({"error": "City not found"}), 404
-
-
-
-        lat = geo_response["results"][0]["latitude"]
-
-        lon = geo_response["results"][0]["longitude"]
-
-        found_city = geo_response["results"][0]["name"]
-
-
-
-        weather_response = requests.get(
-
-            f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_sum&timezone=auto&forecast_days=3",
+            },
 
             timeout=10
 
@@ -827,31 +848,47 @@ def get_forecast():
 
 
 
-        daily = weather_response.get("daily", {})
+        if str(current_response.get("cod")) != "200":
 
-        forecast_data = []
+            return jsonify({"error": current_response.get("message", "City not found")}), 404
 
-        
 
-        for i in range(min(3, len(daily.get("time", [])))):
 
-            forecast_data.append({
+        found_city = current_response.get("name", city)
 
-                "date": daily["time"][i],
+        lat = current_response["coord"]["lat"]
 
-                "max_temp": daily["temperature_2m_max"][i],
+        lon = current_response["coord"]["lon"]
 
-                "min_temp": daily["temperature_2m_min"][i],
 
-                "weathercode": daily["weather_code"][i],
 
-                "condition": get_weather_condition(daily["weather_code"][i]),
+        forecast_response = requests.get(
 
-                "precipitation": daily.get("precipitation_sum", [0, 0, 0])[i]
+            f"{OPENWEATHER_BASE_URL}/forecast",
 
-            })
+            params={
 
-        
+                "lat": lat,
+
+                "lon": lon,
+
+                "appid": OPENWEATHER_API_KEY,
+
+                "units": "metric"
+
+            },
+
+            timeout=10
+
+        ).json()
+
+
+
+        forecast_list = forecast_response.get("list", [])
+
+        forecast_data = get_forecast_data_owm(forecast_list)
+
+
 
         return jsonify({
 
@@ -861,7 +898,7 @@ def get_forecast():
 
         })
 
-        
+
 
     except requests.exceptions.Timeout:
 

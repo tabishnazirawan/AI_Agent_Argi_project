@@ -11,6 +11,9 @@ BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
 SENDER_EMAIL = "23-se-117@student.hitecuni.edu.pk"
 SENDER_NAME = "Agri-AI Team By TYS"
 
+OPENWEATHER_API_KEY = os.environ.get("OPENWEATHER_API_KEY")
+OPENWEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5"
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FARMERS_DB = os.path.join(BASE_DIR, "farmers_data.json")
 MARKET_DATA_DB = os.path.join(BASE_DIR, "market_data.json")
@@ -106,26 +109,34 @@ def get_current_season():
         return "autumn"
 
 def get_weather_data(city):
-    """Fetch weather data for email content"""
+    """Fetch weather data for email content (OpenWeatherMap version)"""
     try:
-        geo_url = f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1"
-        geo_res = requests.get(geo_url, timeout=10).json()
-
-        if not geo_res.get("results"):
+        if not OPENWEATHER_API_KEY:
+            print("Weather fetch error: OPENWEATHER_API_KEY not set")
             return None
 
-        lat = geo_res["results"][0]["latitude"]
-        lon = geo_res["results"][0]["longitude"]
-        city_name = geo_res["results"][0]["name"]
+        weather_url = f"{OPENWEATHER_BASE_URL}/weather"
+        weather_res = requests.get(
+            weather_url,
+            params={
+                "q": city,
+                "appid": OPENWEATHER_API_KEY,
+                "units": "metric"
+            },
+            timeout=10
+        ).json()
 
-        weather_url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,wind_speed_10m"
-        weather_res = requests.get(weather_url, timeout=10).json()
-        current = weather_res["current"]
+        if str(weather_res.get("cod")) != "200":
+            return None
+
+        city_name = weather_res.get("name", city)
+        main = weather_res.get("main", {})
+        wind = weather_res.get("wind", {})
 
         return {
             "city": city_name,
-            "temperature": current["temperature_2m"],
-            "windspeed": current["wind_speed_10m"],
+            "temperature": main.get("temp"),
+            "windspeed": wind.get("speed", 0),
             "time": datetime.now().strftime("%Y-%m-%d %H:%M")
         }
     except Exception as e:
