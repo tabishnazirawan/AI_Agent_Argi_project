@@ -354,17 +354,13 @@ def get_weather():
         # Get current weather AND forecast (3 days)
 
         weather_response = requests.get(
-
             f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,wind_speed_10m,weather_code,is_day,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&forecast_days=3",
-
             timeout=10
-
         ).json()
 
-
+        print(f"🌦️ DEBUG weather_response: {weather_response}")
 
         if "current" not in weather_response:
-
             return jsonify({"error": "Weather data not available"}), 500
 
 
