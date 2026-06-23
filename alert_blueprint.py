@@ -118,14 +118,14 @@ def get_weather_data(city):
         lon = geo_res["results"][0]["longitude"]
         city_name = geo_res["results"][0]["name"]
 
-        weather_url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true"
+        weather_url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,wind_speed_10m"
         weather_res = requests.get(weather_url, timeout=10).json()
-        current = weather_res["current_weather"]
+        current = weather_res["current"]
 
         return {
             "city": city_name,
-            "temperature": current["temperature"],
-            "windspeed": current["windspeed"],
+            "temperature": current["temperature_2m"],
+            "windspeed": current["wind_speed_10m"],
             "time": datetime.now().strftime("%Y-%m-%d %H:%M")
         }
     except Exception as e:
@@ -269,9 +269,6 @@ def send_email_alert(recipient_email, message_body, subject="Agri-AI Alert"):
         if not BREVO_API_KEY:
             print("❌ EMAIL ERROR: BREVO_API_KEY not set in environment")
             return False
-
-        # TEMPORARY DEBUG LINE - hata dena baad mein
-        print(f"🔑 DEBUG: Key starts with '{BREVO_API_KEY[:10]}' length={len(BREVO_API_KEY)}")
 
         url = "https://api.brevo.com/v3/smtp/email"
         headers = {

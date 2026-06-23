@@ -355,7 +355,7 @@ def get_weather():
 
         weather_response = requests.get(
 
-            f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&forecast_days=3",
+            f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,wind_speed_10m,weather_code,is_day,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&forecast_days=3",
 
             timeout=10
 
@@ -363,21 +363,21 @@ def get_weather():
 
 
 
-        if "current_weather" not in weather_response:
+        if "current" not in weather_response:
 
             return jsonify({"error": "Weather data not available"}), 500
 
 
 
-        current = weather_response["current_weather"]
+        current = weather_response["current"]
 
         daily = weather_response.get("daily", {})
 
         
 
-        # Get weather condition name from weathercode
+        # Get weather condition name from weather_code
 
-        weathercode = int(current["weathercode"])
+        weathercode = int(current["weather_code"])
 
         condition_name = get_weather_condition(weathercode)
 
@@ -387,7 +387,7 @@ def get_weather():
 
         # based on temperature and weather conditions
 
-        humidity = simulate_humidity(weathercode, current["temperature"])
+        humidity = simulate_humidity(weathercode, current["temperature_2m"])
 
         
 
@@ -399,15 +399,15 @@ def get_weather():
 
             "country": country,
 
-            "temperature": current["temperature"],
+            "temperature": current["temperature_2m"],
 
-            "feels_like": current["temperature"],  # Same as temp for simplicity
+            "feels_like": current["temperature_2m"],  # Same as temp for simplicity
 
             "humidity": humidity,
 
-            "windspeed": current["windspeed"],
+            "windspeed": current["wind_speed_10m"],
 
-            "wind_direction": get_wind_direction(current.get("winddirection", 0)),
+            "wind_direction": get_wind_direction(current.get("wind_direction_10m", 0)),
 
             "weathercode": weathercode,
 
@@ -609,9 +609,9 @@ def get_forecast_data(daily):
 
             "min_temp": daily["temperature_2m_min"][i],
 
-            "weathercode": daily["weathercode"][i],
+            "weathercode": daily["weather_code"][i],
 
-            "condition": get_weather_condition(daily["weathercode"][i])
+            "condition": get_weather_condition(daily["weather_code"][i])
 
         })
 
@@ -733,7 +733,7 @@ def get_weather_by_city_name(city_name):
 
         weather_response = requests.get(
 
-            f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true&timezone=auto",
+            f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,wind_speed_10m,weather_code&timezone=auto",
 
             timeout=10
 
@@ -741,13 +741,13 @@ def get_weather_by_city_name(city_name):
 
 
 
-        current = weather_response["current_weather"]
+        current = weather_response["current"]
 
-        weathercode = int(current["weathercode"])
+        weathercode = int(current["weather_code"])
 
         condition_name = get_weather_condition(weathercode)
 
-        humidity = simulate_humidity(weathercode, current["temperature"])
+        humidity = simulate_humidity(weathercode, current["temperature_2m"])
 
         
 
@@ -755,9 +755,9 @@ def get_weather_by_city_name(city_name):
 
             "city": found_city,
 
-            "temperature": current["temperature"],
+            "temperature": current["temperature_2m"],
 
-            "windspeed": current["windspeed"],
+            "windspeed": current["wind_speed_10m"],
 
             "weathercode": weathercode,
 
@@ -823,7 +823,7 @@ def get_forecast():
 
         weather_response = requests.get(
 
-            f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&daily=temperature_2m_max,temperature_2m_min,weathercode,precipitation_sum&timezone=auto&forecast_days=3",
+            f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_sum&timezone=auto&forecast_days=3",
 
             timeout=10
 
@@ -847,9 +847,9 @@ def get_forecast():
 
                 "min_temp": daily["temperature_2m_min"][i],
 
-                "weathercode": daily["weathercode"][i],
+                "weathercode": daily["weather_code"][i],
 
-                "condition": get_weather_condition(daily["weathercode"][i]),
+                "condition": get_weather_condition(daily["weather_code"][i]),
 
                 "precipitation": daily.get("precipitation_sum", [0, 0, 0])[i]
 
@@ -1052,4 +1052,3 @@ if __name__ == "__main__":
 
 
 # ── Crop Yield V2 (crop_yield_model.pkl) ─────────────────────
-
