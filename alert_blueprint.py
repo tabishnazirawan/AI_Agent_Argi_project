@@ -7,6 +7,10 @@ from datetime import datetime, timedelta
 alert_bp = Blueprint("alert_bp", __name__)
 
 # --- CONFIGURATION ---
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
+RESEND_SENDER_EMAIL = "onboarding@resend.dev"  # Resend's free testing sender, works without domain verification
+RESEND_SENDER_NAME = "Agri-AI Team By TYS"
+
 BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
 SENDER_EMAIL = "23-se-117@student.hitecuni.edu.pk"
 SENDER_NAME = "Agri-AI Team By TYS"
@@ -275,12 +279,43 @@ def create_disease_alert(city):
     Agri-AI Team
     """
 
-def send_email_alert(recipient_email, message_body, subject="Agri-AI Alert"):
+def send_via_resend(recipient_email, message_body, subject):
+    """Try sending via Resend (no manual activation needed, works immediately)"""
+    if not RESEND_API_KEY:
+        return False
+
     try:
-        if not BREVO_API_KEY:
-            print("❌ EMAIL ERROR: BREVO_API_KEY not set in environment")
+        url = "https://api.resend.com/emails"
+        headers = {
+            "Authorization": f"Bearer {RESEND_API_KEY}",
+            "Content-Type": "application/json",
+        }
+        payload = {
+            "from": f"{RESEND_SENDER_NAME} <{RESEND_SENDER_EMAIL}>",
+            "to": [recipient_email],
+            "subject": subject,
+            "text": message_body,
+        }
+
+        response = requests.post(url, headers=headers, json=payload, timeout=15)
+
+        if response.status_code in (200, 201):
+            print(f"✅ Email sent successfully via Resend to {recipient_email}")
+            return True
+        else:
+            print(f"❌ RESEND EMAIL ERROR: {response.status_code} - {response.text}")
             return False
 
+    except Exception as e:
+        print(f"❌ RESEND EMAIL ERROR: {type(e).__name__}: {str(e)}")
+        return False
+
+def send_via_brevo(recipient_email, message_body, subject):
+    """Fallback: try sending via Brevo"""
+    if not BREVO_API_KEY:
+        return False
+
+    try:
         url = "https://api.brevo.com/v3/smtp/email"
         headers = {
             "accept": "application/json",
@@ -297,15 +332,27 @@ def send_email_alert(recipient_email, message_body, subject="Agri-AI Alert"):
         response = requests.post(url, headers=headers, json=payload, timeout=15)
 
         if response.status_code in (200, 201):
-            print(f"✅ Email sent successfully to {recipient_email}")
+            print(f"✅ Email sent successfully via Brevo to {recipient_email}")
             return True
         else:
-            print(f"❌ DETAILED EMAIL ERROR: {response.status_code} - {response.text}")
+            print(f"❌ BREVO EMAIL ERROR: {response.status_code} - {response.text}")
             return False
 
     except Exception as e:
-        print(f"❌ DETAILED EMAIL ERROR: {type(e).__name__}: {str(e)}")
+        print(f"❌ BREVO EMAIL ERROR: {type(e).__name__}: {str(e)}")
         return False
+
+def send_email_alert(recipient_email, message_body, subject="Agri-AI Alert"):
+    """Dual provider email sending: Resend first, Brevo as fallback"""
+    if send_via_resend(recipient_email, message_body, subject):
+        return True
+
+    print("⚠️ Resend failed or not configured, trying Brevo fallback...")
+    if send_via_brevo(recipient_email, message_body, subject):
+        return True
+
+    print("❌ Both email providers failed.")
+    return False
 
 # --- API ROUTES ---
 
